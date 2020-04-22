@@ -1,2 +1,2 @@
-# werk-squad-tools
-Procedures for calculating galaxy properties from spectra
+# werk-squad-tools 
+Procedures for calculating Pettini and Pagel N2 ratio method to calculate metallicity
