@@ -50,7 +50,7 @@ def SFR_switchboard(lines_df):
     Ha_cond = (lines_df['Halpha_LQ']>0) & (lines_df['Halpha_LQ']<2) 
     Hb_cond = (lines_df['Hbeta_LQ']>0) & (lines_df['Hbeta_LQ']<2) & (lines_df['Halpha_LQ']!=1)
     # Make flags
-    SFR_flag = np.zeros_like(lines_df)
+    SFR_flags = np.zeros_like(lines_df)
     Ha_index = lines_df[Ha_cond].index
     Hb_index = lines_df[Hb_cond].index
     SFR_flags[Ha_index] = 'Ha'
