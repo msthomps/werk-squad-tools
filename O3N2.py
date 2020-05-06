@@ -41,9 +41,9 @@ def O3N2(gl):
     for i in gl.index:
         if (gl['O3HB'][i].dtype == np.float) and (gl['N2'][i].dtype == np.float):
             value = eq(gl['O3HB'][i],gl['N2'][i])
-            array[i-2] = np.float(value)
+            array[i] = np.float(value)
         else:
-            array[i-2] = np.nan # for not available 'O3N2'
+            array[i] = np.nan # for not available 'O3N2'
     # Return
     return array
 
@@ -70,9 +70,9 @@ def Z_O3N2L(gl):
     for i in gl.index:
         if (gl['O3N2'][i].dtype == np.float) and (gl['O3N2'][i] < 1.9):
             metal = 8.73-(0.32*gl['O3N2'][i])
-            array[i-2] = np.float(metal)
+            array[i] = np.float(metal)
         else:
-            array[i-2] = np.nan # for not available metallicity
+            array[i] = np.nan # for not available metallicity
     # Return
     return array
 
