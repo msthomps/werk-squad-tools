@@ -42,7 +42,7 @@ galaxy['SFR_Ha'] = SFR(galaxy['Ha_luminosity'])
 # Calculating SFR using Hbeta luminosity, and then eliminating values (NaN) 
 # that already have 'SFR_Ha' values not equal to NaN
 sfr_b = SFR(galaxy['Hb_luminosity'])
-nosfr_b = np.where(galaxy['SFR_Ha'] > 0.0)
+nosfr_b = galaxy['SFR_Ha'] > 0.0
 sfr_b[nosfr_b] = np.nan
 galaxy['SFR_Hb'] = sfr_b
 
@@ -59,7 +59,7 @@ galaxy['O3N2'] = O3N2(galaxy)
 galaxy['Z_O3N2L'] = Z_O3N2L(galaxy)
 
 # Calculate where 'O3N2' > 1.9, as well as where 'N2' exists but 'O3N2' does not
-no_N2_Z = np.where((galaxy['Z_O3N2L'] > 0.0) & (galaxy['O3N2'] < 1.9))
+no_N2_Z = (galaxy['Z_O3N2L'] > 0.0) & (galaxy['O3N2'] < 1.9)
 N2_Z = logN2_metallicity(galaxy['N2'])
 N2_Z[no_N2_Z] = np.nan
 galaxy['Z_O3N2H'] = N2_Z
