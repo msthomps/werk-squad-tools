@@ -13,6 +13,10 @@ from O3HB import*
 from N2 import*
 from Pettini_Pagel_N2 import*
 
+'''
+This script is a flowchart for calculating metallicity using the techniques as described in Pettini & Pagel. The script uses functions written by the members of Werk SQuAD. Initially the script prompts the user for a data-file path to be input. The script then searches for all '-99.0' values in the data and changes them to 'np.nan' (NaN) values. The script then carries out the necessary sorting and calculations to attain metallicity (Z) values using O3N2, N2, and R23 (Pettini Pagel 2004). This script also merges the input file with the 'cgmsq_allsurveys_cgmsystable.fits' data-file before prompting the user to input a file path, and name, to save the final DataFrame to.
+'''
+
 # 'galaxy' is a data table of Final_galinfo.csv file which 
 # is a subset of data from the galaxyinfo.xlsx data from CGM^2
 txt_in = input("Please input Filepath: ")
