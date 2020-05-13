@@ -36,7 +36,7 @@ def O3N2(gl):
         value = np.log10(o3hb/n2)
         return value
     # Create a new array of float zeros
-    array = np.zeros(782)
+    array = np.zeros(len(gl))
     # Calculate 'O3N2' for each target 
     for i in gl.index:
         if (gl['O3HB'][i].dtype == np.float) and (gl['N2'][i].dtype == np.float):

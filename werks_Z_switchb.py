@@ -13,6 +13,16 @@ from O3HB import*
 from N2 import*
 from Pettini_Pagel_N2 import*
 
+'''
+This script is a flowchart for calculating metallicity using the techniques as described in Pettini &
+Pagel. The script uses functions written by the members of Werk SQuAD. Initially the script prompts the
+user for a data-file path to be input. The script then searches for all '-99.0' values in the data and
+changes them to 'np.nan' (NaN) values. The script then carries out the necessary sorting and calculations
+to attain metallicity (Z) values using O3N2, N2, and R23 (Pettini Pagel 2004). This script also merges the
+input file with the 'cgmsq_allsurveys_cgmsystable.fits' data-file before prompting the user to input a
+file path, and name, to save the final DataFrame to.
+'''
+
 # 'galaxy' is a data table of Final_galinfo.csv file which 
 # is a subset of data from the galaxyinfo.xlsx data from CGM^2
 txt_in = input("Please input Filepath: ")
@@ -31,20 +41,18 @@ for i in columns:
 # Calculate distance
 galaxy['Distance'] = Distance(galaxy['z'])
 
-# Calculate Halpha and Hbeta Luminosity
-galaxy['Ha_luminosity'] = Ha_luminosity(galaxy['Distance'],galaxy['Halpha_flux'])
+# Calculate Halpha Luminosity, using Halpha_flux and 2.86(Hbeta_flux)
 Hbeta = 2.86*galaxy['Hbeta_flux']
-galaxy['Hb_luminosity'] = Ha_luminosity(galaxy['Distance'],Hbeta)
+galaxy['Ha_luminosity'] = Ha_luminosity(galaxy['Distance'],Hbeta)
+
+gala_Ha = Ha_luminosity(galaxy['Distance'],galaxy['Halpha_flux'])
+galaxy_Ha = gala_Ha > 0.0
+g = galaxy['Ha_luminosity']
+g[galaxy_Ha] = gala_Ha
 
 # Calculating SFR using Halpha luminosity
-galaxy['SFR_Ha'] = SFR(galaxy['Ha_luminosity'])
-
-# Calculating SFR using Hbeta luminosity, and then eliminating values (NaN) 
-# that already have 'SFR_Ha' values not equal to NaN
-sfr_b = SFR(galaxy['Hb_luminosity'])
-nosfr_b = galaxy['SFR_Ha'] > 0.0
-sfr_b[nosfr_b] = np.nan
-galaxy['SFR_Hb'] = sfr_b
+galaxy['SFR_WS'] = SFR(galaxy['Ha_luminosity'])
+galaxy['SFR_flag'] = SFR_switchboard(galaxy)
 
 # Calculate 'O3HB'
 galaxy['O3HB'] = O3HB(galaxy['OIII_flux'],galaxy['Hbeta_flux'])
@@ -106,9 +114,15 @@ one = (galaxy['Z_O3N2L'] > 0.0) | (galaxy['O3N2'] > 1.9)
 z_flag[one] = 'O3N2'
 galaxy['Z_Flag'] = z_flag
 
+# This next part is just to rename some columns that may conflict. We will name the column where
+# SFR was calculated by Werk SQuAD 'SFR' and the column where SFR was calculated using photometry (CIGALE)
+# 'SFR_photo' 
+galaxy.rename(columns={'SFR':'SFR_photo'}, inplace=True)
+galaxy.rename(columns={'SFR_WS':'SFR'}, inplace=True)
+
 # Finally we'll save the data to the directory of th eusers liking.
 txt_out = input("Please input filepath and name to save to: ")
 galaxy.to_csv(txt_out, index=False)
-print('Thank you, come again.')
+print('Thank you.')
 
 #print(galaxy)
